@@ -1,35 +1,24 @@
 window.addEventListener("load",()=>{
-    const canvas = document.querySelector("#canvas");
-    const ctx = canvas.getContext("2d")
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
 
-    //Resize
-    canvas.height = window.innerHeight;
-    canvas.width = window.innerWidth;
+    canvas.height = 0;
+    canvas.width = 0;
 
-    //variables
-    let painting = false;
-
-    function startPosition(e){
-        painting = true;
-        draw(e);
-    }
-    function finishedPosition(){
-        painting = false;
-        ctx.beginPath();
-    }
-    function draw(e){
-        if(!painting) return;
-        ctx.lineWidth = 10;
-        ctx.lineCap = "round";
-
-        ctx.lineTo(e.clientX,e.clientY);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(e.clientX,e.clientY);
-
-    }
-    //EventListener
-    canvas.addEventListener('mousedown',startPosition);
-    canvas.addEventListener('mouseup',finishedPosition);
-    canvas.addEventListener('mousemove',draw);
+    console.table(Matrix(20,20))
 });
+
+//Function to create a 2D Array with 1 and 0 in random places 
+// 1 = life 
+// 0 = Empty Space
+function Matrix(x,y){
+    mtx = new Array
+    for(let row = 0; row < y; row += 1){
+        mtx.push([])
+        for(let col = 0; col < x; col += 1){
+            mtx[row].push(Math.floor(Math.random()*2))
+        }
+    }
+    return mtx
+};
+
