@@ -4,5 +4,10 @@
     box-sizing: border-box;
 }
 #canvas{
+    display: block;
     border: 2px solid #000;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    
 }
