@@ -1,12 +1,10 @@
 
-
-
 window.addEventListener("load",()=>{
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
-    const height = 300;
-    const width = 300
-    let area = 50;
+    const height = 900;
+    const width = 900
+    let area = 25;
     let cols = Math.floor(width/area);
     let rows = Math.floor(height/area);
     let pvMtx = RandomGrid(cols,rows);
@@ -14,29 +12,19 @@ window.addEventListener("load",()=>{
     canvas.height = height;
     canvas.width = width;
 
-    pvMtx = [[0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 1, 0],
-    [0, 0, 1, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0]]
     CanvasGrid(ctx,pvMtx,area,cols,rows);
     Main(pvMtx,area,cols,rows,ctx,width,height)
-
 });
 
 
 function Main(pvMtx,area,cols,rows,ctx,w,h){ 
-    let i = 0
-    const a = setInterval(() => {
+    const interval = setInterval(() => {
         let nwMtx = Grid(pvMtx,cols,rows);
         ctx.clearRect(0,0,w,h)
         CanvasGrid(ctx,nwMtx,area,cols,rows);
+        if(nwMtx === pvMtx){ clearInterval(a); console.log('stoped')}
         pvMtx = nwMtx
-        console.table(pvMtx)
-        i ++
-        if(i == 3) clearInterval(a)
-    },500)
+    },50)
 };
 
 //Function to create a 2D Array of numbers in random places 
@@ -52,11 +40,11 @@ function RandomGrid(cols,rows){
 };
 
 // Count the neighbors of a cell. 
-function CountNeighbors(mtx,r,c,cols,rows){
+function CountNeighbors(mtx,r,c,cols,rows,state){
     let sum = 0;
+    if(state) sum--
     for(let i = -1; i < 2; i++){
         for(let j = -1; j < 2; j++){
-            if((r+i,c+j) == (r,c)) continue;
             sum += mtx[((r+i)+rows)%rows][((c+j)+cols)%cols];
         };
     };
@@ -68,8 +56,10 @@ function Grid(mtx,cols,rows){
     for(let r = 0; r < rows; r++){
         newMtx.push([]);
         for(let c = 0; c < cols; c++){
-            neighbors = CountNeighbors(mtx,r,c,cols,rows);
-            if(neighbors >= 2 && neighbors <= 3) newMtx[r].push(1);
+            state = mtx[r][c];
+            neighbors = CountNeighbors(mtx,r,c,cols,rows,state);
+            if(state == 0 && neighbors == 3) newMtx[r].push(1);
+            else if(state == 1 && (neighbors == 2 || neighbors == 3)) newMtx[r].push(1);
             else newMtx[r].push(0);
         };
     };
