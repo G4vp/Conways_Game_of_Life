@@ -4,32 +4,36 @@ window.addEventListener("load",()=>{
 
     canvas.height = 500;
     canvas.width = 500;
-    area = 50;
+    area = 10;
 
-    mtx = Matrix(Math.floor(canvas.width/area),Math.floor(canvas.height/area));
-    console.table(mtx);
-    Grid(ctx,mtx,area);
-    
+    pvMtx = PrevGrid(Math.floor(canvas.width/area),Math.floor(canvas.height/area));
+    CanvasGrid(ctx,pvMtx,area);
+
 });
 
 //Function to create a 2D Array of numbers in random places 
 
-function Matrix(x,y){
+function PrevGrid(x,y){
     mtx = new Array;
     for(let row = 0; row < y; row += 1){
         mtx.push([]);
         for(let col = 0; col < x; col += 1){
-            mtx[row].push(Math.floor(Math.random()*5));
+            mtx[row].push(Math.floor((Math.random()*2)));
         };
     };
     return mtx;
+};
+
+function CountNeighbors(mtx,r,c){
+    
+    return 
 };
 
 // Function to draw a grid in the canvas
 // if Matrix[ i ][ j ] == 1 == life (Filled Square) 
 // Otherwise = Empty Space (Square not filled)
 
-function Grid(ctx,mtx,area){
+function CanvasGrid(ctx,mtx,area){
     for(let col = 0; col < mtx[0].length;col++){
         for(let row = 0; row < mtx.length; row++){
             if(mtx[row][col] == 1) ctx.fillRect(col*area,row*area,area,area);
@@ -37,4 +41,5 @@ function Grid(ctx,mtx,area){
         };
     };
 };
+
 
