@@ -5,13 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Conway's Game of Life</title>
-    <script type="text/javascript" src="js\main.js"></script>
-    <script type="text/javascript" src="js\UI.js"></script>
+    <script type="text/javascript" src="js\game.js"></script>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="images\glider.png">
 </head>
 <body>
-    <button onclick="">Clear</button>
+    <button onclick="" id="Random_Button">Random</button>
+    <button onclick="Pause()" id="Stop_Button">Stop</button>
+    <button onclick="Play()" id="Play_Button">Play</button>
     <canvas id="canvas"></canvas>
 </body>
 </html>

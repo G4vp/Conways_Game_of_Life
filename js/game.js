@@ -1,18 +1,20 @@
+const height = 500;
+const width = 500;
+let scale = 10;
+let cols = Math.floor(width/scale);
+let rows = Math.floor(height/scale);
+let isPaused = false
+let prev_Grid = RandomGrid(cols,rows);
+let ctx = null
 
 window.addEventListener("load",()=>{
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
-    const height = 500;
-    const width = 500;
-    let scale = 10;
-    let cols = Math.floor(width/scale);
-    let rows = Math.floor(height/scale);
-    let prev_Grid = RandomGrid(cols,rows);
+const canvas = document.getElementById("canvas");
+ctx = canvas.getContext("2d");
 
-    canvas.height = height;
-    canvas.width = width;
+canvas.height = height;
+canvas.width = width;
 
-    UpdateDisplay(prev_Grid,scale,cols,rows,ctx,width,height);
+UpdateDisplay(prev_Grid,scale,cols,rows,ctx,width,height);
 });
 
 /*
@@ -23,7 +25,10 @@ function UpdateDisplay(prev_Grid,scale,cols,rows,ctx,w,h){
         let new_Grid = Grid(prev_Grid,cols,rows);
         ctx.clearRect(0,0,w,h);
         CanvasGrid(ctx,new_Grid,scale,cols,rows);
-        if(new_Grid === prev_Grid) clearInterval(interval);
+        if(isPaused) {
+            clearInterval(interval)
+            console.log('asd')
+        };
         prev_Grid = new_Grid;
     },20)
 };
@@ -127,3 +132,11 @@ function CanvasGrid(ctx,mtx,scale,cols,rows){
 };
 
 
+
+function Pause(){
+    isPaused = true
+}
+function Play(){
+    isPaused = false
+    UpdateDisplay(prev_Grid,scale,cols,rows,ctx,width,height);
+}
