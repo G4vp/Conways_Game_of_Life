@@ -1,20 +1,19 @@
-const height = 500;
-const width = 500;
-let scale = 10;
-let cols = Math.floor(width/scale);
-let rows = Math.floor(height/scale);
-let isPaused = false
-let prev_Grid = RandomGrid(cols,rows);
-let ctx = null
+let IsPaused = false
 
 window.addEventListener("load",()=>{
-const canvas = document.getElementById("canvas");
-ctx = canvas.getContext("2d");
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const height = 500;
+    const width = 500;
+    let scale = 10;
+    let cols = Math.floor(width/scale);
+    let rows = Math.floor(height/scale);
+    let prev_Grid = RandomGrid(cols,rows);
 
-canvas.height = height;
-canvas.width = width;
+    canvas.height = height;
+    canvas.width = width;
 
-UpdateDisplay(prev_Grid,scale,cols,rows,ctx,width,height);
+    UpdateDisplay(prev_Grid,scale,cols,rows,ctx,width,height);
 });
 
 /*
@@ -23,12 +22,14 @@ UpdateDisplay(prev_Grid,scale,cols,rows,ctx,width,height);
 function UpdateDisplay(prev_Grid,scale,cols,rows,ctx,w,h){ 
     const interval = setInterval(() => {
         let new_Grid = Grid(prev_Grid,cols,rows);
+
         ctx.clearRect(0,0,w,h);
         CanvasGrid(ctx,new_Grid,scale,cols,rows);
         prev_Grid = new_Grid;
-        if(isPaused) {
+
+        if(IsPaused){
             clearInterval(interval)
-        };
+        }
     },20)
 };
 
@@ -131,14 +132,8 @@ function CanvasGrid(ctx,mtx,scale,cols,rows){
 };
 
 
-
 function Pause(){
-    isPaused = true;
+    IsPaused = true;
 }
-// (is not a bug is a feature)
-function Restart(){
-    if (isPaused){
-        isPaused = false;
-        UpdateDisplay(prev_Grid,scale,cols,rows,ctx,width,height);
-    }
-}
+
+
