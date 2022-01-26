@@ -25,11 +25,10 @@ function UpdateDisplay(prev_Grid,scale,cols,rows,ctx,w,h){
         let new_Grid = Grid(prev_Grid,cols,rows);
         ctx.clearRect(0,0,w,h);
         CanvasGrid(ctx,new_Grid,scale,cols,rows);
+        prev_Grid = new_Grid;
         if(isPaused) {
             clearInterval(interval)
-            console.log('asd')
         };
-        prev_Grid = new_Grid;
     },20)
 };
 
@@ -134,9 +133,12 @@ function CanvasGrid(ctx,mtx,scale,cols,rows){
 
 
 function Pause(){
-    isPaused = true
+    isPaused = true;
 }
-function Play(){
-    isPaused = false
-    UpdateDisplay(prev_Grid,scale,cols,rows,ctx,width,height);
+// (is not a bug is a feature)
+function Restart(){
+    if (isPaused){
+        isPaused = false;
+        UpdateDisplay(prev_Grid,scale,cols,rows,ctx,width,height);
+    }
 }
