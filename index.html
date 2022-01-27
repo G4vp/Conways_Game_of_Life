@@ -8,14 +8,19 @@
     <script type="text/javascript" src="js\game.js"></script>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="images\glider.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="Buttons">
-        <button onclick="Random()" id="Random_Button">Random</button>
-        <button onclick="Pause()" id="Stop_Button">Stop</button>
-        <button onclick="Play()"id="Play_Button">Play</button>
-        <button onclick="Reset()" id="Reset_Button">Reset</button>
-    </div>
-    <canvas id="canvas"></canvas>
+    <section class="Game">
+        <aside class="Buttons">
+            <button onclick="Play()"id="Play_Button">Play</button>
+            <button onclick="Stop()" id="Stop_Button">Stop</button>
+            <button onclick="Reset()" id="Reset_Button">Reset</button>
+            <button onclick="Random()" id="Random_Button">Random</button>
+        </aside>
+        <canvas id="canvas"></canvas>
+    </section>
 </body>
 </html>
