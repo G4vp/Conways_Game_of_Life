@@ -1,12 +1,12 @@
-let IsPaused = true
+let isStopped = true
 let beginning = null
 let resume = null
 
 window.addEventListener("load",()=>{
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
-    const height = 500;
-    const width = 500;
+    const height = 800;
+    const width = 900;
     let scale = 10;
     let cols = Math.floor(width/scale);
     let rows = Math.floor(height/scale);
@@ -15,6 +15,8 @@ window.addEventListener("load",()=>{
     canvas.height = height;
     canvas.width = width;
     beginning = [prev_Grid,scale,cols,rows,ctx,width,height]
+    
+    disable_buttons()
     UpdateDisplay(prev_Grid,scale,cols,rows,ctx,width,height);
 });
 
@@ -29,12 +31,11 @@ function UpdateDisplay(prev_Grid,scale,cols,rows,ctx,w,h){
         CanvasGrid(ctx,new_Grid,scale,cols,rows);
         prev_Grid = new_Grid;
 
-        if(IsPaused){
+        if(isStopped){
             resume = [prev_Grid,scale,cols,rows,ctx,w,h]
             clearInterval(interval)
-            console.log(resume)
         }
-    },20)
+    },35)
 };
 
 /*
@@ -138,28 +139,35 @@ function CanvasGrid(ctx,mtx,scale,cols,rows){
 
 
 
-function Pause(){
-    IsPaused = true;
+function Stop(){
+    isStopped = true;
+    disable_buttons()
 }
 
 function Play(){
-    if(IsPaused){
-        let [prev_Grid,scale,cols,rows,ctx,w,h] = resume;
-        IsPaused = false
-        UpdateDisplay(prev_Grid,scale,cols,rows,ctx,w,h);
-    }
+    
+    let [prev_Grid,scale,cols,rows,ctx,w,h] = resume;
+    isStopped = false
+    disable_buttons()
+    UpdateDisplay(prev_Grid,scale,cols,rows,ctx,w,h);
+    
 }
 
 function Reset(){
-    if(IsPaused){
-        let [initial_Grid,scale,cols,rows,ctx,w,h] = beginning;
-        UpdateDisplay(initial_Grid,scale,cols,rows,ctx,w,h);
-    }
+    let [initial_Grid,scale,cols,rows,ctx,w,h] = beginning;
+    UpdateDisplay(initial_Grid,scale,cols,rows,ctx,w,h);
 }
 
 function Random(){
     let [_,scale,cols,rows,ctx,w,h] = beginning;
-    if(IsPaused){
-        UpdateDisplay(RandomGrid(cols,rows),scale,cols,rows,ctx,w,h);
-    }
+    UpdateDisplay(RandomGrid(cols,rows),scale,cols,rows,ctx,w,h);
+}
+    
+    
+
+function disable_buttons(){
+    pause_dis = document.getElementById("Stop_Button").disabled = isStopped;
+    play_dis = document.getElementById("Play_Button").disabled = !isStopped;
+    reset_dis = document.getElementById("Reset_Button").disabled = !isStopped;
+    random_dis = document.getElementById("Random_Button").disabled = !isStopped;
 }
