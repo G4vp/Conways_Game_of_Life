@@ -150,7 +150,7 @@ function Play(){
     }
 }
 
-function Restart(){
+function Reset(){
     if(IsPaused){
         let [initial_Grid,scale,cols,rows,ctx,w,h] = beginning;
         UpdateDisplay(initial_Grid,scale,cols,rows,ctx,w,h);
