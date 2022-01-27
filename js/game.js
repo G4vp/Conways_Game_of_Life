@@ -1,4 +1,6 @@
-let IsPaused = false
+let IsPaused = true
+let beginning = null
+let resume = null
 
 window.addEventListener("load",()=>{
     const canvas = document.getElementById("canvas");
@@ -12,7 +14,7 @@ window.addEventListener("load",()=>{
 
     canvas.height = height;
     canvas.width = width;
-
+    beginning = [prev_Grid,scale,cols,rows,ctx,width,height]
     UpdateDisplay(prev_Grid,scale,cols,rows,ctx,width,height);
 });
 
@@ -28,7 +30,9 @@ function UpdateDisplay(prev_Grid,scale,cols,rows,ctx,w,h){
         prev_Grid = new_Grid;
 
         if(IsPaused){
+            resume = [prev_Grid,scale,cols,rows,ctx,w,h]
             clearInterval(interval)
+            console.log(resume)
         }
     },20)
 };
@@ -132,8 +136,30 @@ function CanvasGrid(ctx,mtx,scale,cols,rows){
 };
 
 
+
+
 function Pause(){
     IsPaused = true;
 }
 
+function Play(){
+    if(IsPaused){
+        let [prev_Grid,scale,cols,rows,ctx,w,h] = resume;
+        IsPaused = false
+        UpdateDisplay(prev_Grid,scale,cols,rows,ctx,w,h);
+    }
+}
 
+function Restart(){
+    if(IsPaused){
+        let [initial_Grid,scale,cols,rows,ctx,w,h] = beginning;
+        UpdateDisplay(initial_Grid,scale,cols,rows,ctx,w,h);
+    }
+}
+
+function Random(){
+    let [_,scale,cols,rows,ctx,w,h] = beginning;
+    if(IsPaused){
+        UpdateDisplay(RandomGrid(cols,rows),scale,cols,rows,ctx,w,h);
+    }
+}
