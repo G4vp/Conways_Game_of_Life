@@ -145,12 +145,10 @@ function Stop(){
 }
 
 function Play(){
-    
     let [prev_Grid,scale,cols,rows,ctx,w,h] = resume;
     isStopped = false
     disable_buttons()
     UpdateDisplay(prev_Grid,scale,cols,rows,ctx,w,h);
-    
 }
 
 function Reset(){
