@@ -5,8 +5,8 @@ let resume = null
 window.addEventListener("load",()=>{
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
-    const height = 800;
-    const width = 900;
+    const height = 500;
+    const width = 500;
     let scale = 10;
     let cols = Math.floor(width/scale);
     let rows = Math.floor(height/scale);
@@ -16,7 +16,7 @@ window.addEventListener("load",()=>{
     canvas.width = width;
     beginning = [prev_Grid,scale,cols,rows,ctx,width,height]
     
-    disable_buttons()
+    Disable_or_Enable()
     UpdateDisplay(prev_Grid,scale,cols,rows,ctx,width,height);
 });
 
@@ -138,34 +138,40 @@ function CanvasGrid(ctx,mtx,scale,cols,rows){
 
 
 
-
-function Stop(){
-    isStopped = true;
-    disable_buttons()
-}
-
-function Play(){
+// The game is stopped
+function B_PlayStop(){
+    let text = document.getElementById("Play/Stop_Button")
     let [prev_Grid,scale,cols,rows,ctx,w,h] = resume;
-    isStopped = false
-    disable_buttons()
-    UpdateDisplay(prev_Grid,scale,cols,rows,ctx,w,h);
+
+    if(text.innerText == 'Play'){
+        isStopped = false;
+        text.innerText = 'Stop'
+        UpdateDisplay(prev_Grid,scale,cols,rows,ctx,w,h);
+    }
+    else{
+        isStopped = true;
+        text.innerText = 'Play'
+    }
+    Disable_or_Enable()
 }
 
-function Reset(){
+function B_Reset(){
     let [initial_Grid,scale,cols,rows,ctx,w,h] = beginning;
     UpdateDisplay(initial_Grid,scale,cols,rows,ctx,w,h);
 }
 
-function Random(){
-    let [_,scale,cols,rows,ctx,w,h] = beginning;
-    UpdateDisplay(RandomGrid(cols,rows),scale,cols,rows,ctx,w,h);
+// R
+function B_Random(){
+    let [initial_Grid,scale,cols,rows,ctx,w,h] = beginning;
+    beginning = [RandomGrid(cols,rows),scale,cols,rows,ctx,w,h];
+    [initial_Grid,scale,cols,rows,ctx,w,h] = beginning;
+    UpdateDisplay(initial_Grid,scale,cols,rows,ctx,w,h);
 }
     
     
-
-function disable_buttons(){
-    pause_dis = document.getElementById("Stop_Button").disabled = isStopped;
-    play_dis = document.getElementById("Play_Button").disabled = !isStopped;
+// The reset and random buttons are disabled when the game is playing
+// The reset and random buttons are enabled when the game is stopped
+function Disable_or_Enable(){
     reset_dis = document.getElementById("Reset_Button").disabled = !isStopped;
     random_dis = document.getElementById("Random_Button").disabled = !isStopped;
 }

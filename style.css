@@ -28,8 +28,10 @@
 .Buttons * {
     font-weight: lighter;
     font-family: 'VT323', monospace;
-    background-color: #fff;
     font-size: x-large;
+    border: 1px solid #000;
+    border-radius: 5px;
+    background-color: #fff;
     width: 100px;
     height: 50px;
 }
