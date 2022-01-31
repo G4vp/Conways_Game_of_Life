@@ -1,38 +1,40 @@
-let isStopped = true
-let beginning = null
-let resume = null
+let stateGame = {
+    isStopped:true,
+    beginning:null,
+    resume:null
+}
 
 window.addEventListener("load",()=>{
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
     const height = 500;
     const width = 500;
-    let scale = 10;
+    let scale = 5;
     let cols = Math.floor(width/scale);
     let rows = Math.floor(height/scale);
-    let prev_Grid = RandomGrid(cols,rows);
+    let prevGrid = randomGrid(cols,rows);
 
     canvas.height = height;
     canvas.width = width;
-    beginning = [prev_Grid,scale,cols,rows,ctx,width,height]
+    stateGame.beginning = {initialGrid:prevGrid,scale,cols,rows,ctx,width,height}
     
-    Disable_or_Enable()
-    UpdateDisplay(prev_Grid,scale,cols,rows,ctx,width,height);
+    disableOrEnable()
+    updateDisplay(prevGrid,scale,cols,rows,ctx,width,height);
 });
 
 /*
     A function that clear the previous grid and draw a new one.
  */
-function UpdateDisplay(prev_Grid,scale,cols,rows,ctx,w,h){ 
+function updateDisplay(prevGrid,scale,cols,rows,ctx,w,h){ 
     const interval = setInterval(() => {
-        let new_Grid = Grid(prev_Grid,cols,rows);
+        let newGrid = grid(prevGrid,cols,rows);
 
         ctx.clearRect(0,0,w,h);
-        CanvasGrid(ctx,new_Grid,scale,cols,rows);
-        prev_Grid = new_Grid;
+        canvasGrid(ctx,newGrid,scale,cols,rows);
+        prevGrid = newGrid;
 
-        if(isStopped){
-            resume = [prev_Grid,scale,cols,rows,ctx,w,h]
+        if(stateGame.isStopped){
+            stateGame.resume = {prevGrid,scale,cols,rows,ctx,w,h}
             clearInterval(interval)
         }
     },35)
@@ -49,7 +51,7 @@ Ex:
 [1,0,0,1,0]
 ]
 */
-function RandomGrid(cols,rows){
+function randomGrid(cols,rows){
     let mtx = new Array;
     for(let row = 0; row < rows; row += 1){
         mtx.push([]);
@@ -71,7 +73,7 @@ function RandomGrid(cols,rows){
 
     2DArray[1][2] have 4 neighbors 
 */
-function CountNeighbors(mtx,r,c,cols,rows,state){
+function countNeighbors(mtx,r,c,cols,rows,state){
     let sum = 0;
     if(state) sum--;
     for(let i = -1; i < 2; i++){
@@ -101,19 +103,19 @@ function CountNeighbors(mtx,r,c,cols,rows,state){
     [1,0,0,1,0]              [0,0,0,0,0]
     ]                       ]
 */
-function Grid(mtx,cols,rows){
-    let new_Grid = new Array;
+function grid(mtx,cols,rows){
+    let newGrid = new Array;
     for(let r = 0; r < rows; r++){
-        new_Grid.push([]);
+        newGrid.push([]);
         for(let c = 0; c < cols; c++){
             state = mtx[r][c];
-            neighbors = CountNeighbors(mtx,r,c,cols,rows,state);
-            if(state == 0 && neighbors == 3) new_Grid[r].push(1);
-            else if(state == 1 && (neighbors == 2 || neighbors == 3)) new_Grid[r].push(1);
-            else new_Grid[r].push(0);
+            neighbors = countNeighbors(mtx,r,c,cols,rows,state);
+            if(state == 0 && neighbors == 3) newGrid[r].push(1);
+            else if(state == 1 && (neighbors == 2 || neighbors == 3)) newGrid[r].push(1);
+            else newGrid[r].push(0);
         };
     };
-    return new_Grid;
+    return newGrid;
 };
 
 /*  
@@ -121,7 +123,7 @@ function Grid(mtx,cols,rows){
     if Matrix[ i ][ j ] == 1 == life (Filled Square) 
     Otherwise = Empty Space (Square not filled)
 */
-function CanvasGrid(ctx,mtx,scale,cols,rows){
+function canvasGrid(ctx,mtx,scale,cols,rows){
     for(let col = 0; col < cols;col++){
         for(let row = 0; row < rows; row++){
             if(mtx[row][col] == 1){
@@ -139,39 +141,40 @@ function CanvasGrid(ctx,mtx,scale,cols,rows){
 
 
 // The game is stopped
-function B_PlayStop(){
-    let text = document.getElementById("Play/Stop_Button")
-    let [prev_Grid,scale,cols,rows,ctx,w,h] = resume;
+function btnPlayStop(){
+    let text = document.getElementById("btnPlayStop")
+    let {prevGrid,scale,cols,rows,ctx,w,h} = stateGame.resume;
 
     if(text.innerText == 'Play'){
-        isStopped = false;
+        stateGame.isStopped = false;
         text.innerText = 'Stop'
-        UpdateDisplay(prev_Grid,scale,cols,rows,ctx,w,h);
+        updateDisplay(prevGrid,scale,cols,rows,ctx,w,h);
     }
     else{
-        isStopped = true;
+        stateGame.isStopped = true;
         text.innerText = 'Play'
     }
-    Disable_or_Enable()
+    disableOrEnable()
 }
 
-function B_Reset(){
-    let [initial_Grid,scale,cols,rows,ctx,w,h] = beginning;
-    UpdateDisplay(initial_Grid,scale,cols,rows,ctx,w,h);
+// Resets the game to the beginning of the actual grid
+function btnReset(){
+    const {initialGrid,scale,cols,rows,ctx,w,h} = stateGame.beginning;
+    updateDisplay(initialGrid,scale,cols,rows,ctx,w,h);
 }
 
-// R
-function B_Random(){
-    let [initial_Grid,scale,cols,rows,ctx,w,h] = beginning;
-    beginning = [RandomGrid(cols,rows),scale,cols,rows,ctx,w,h];
-    [initial_Grid,scale,cols,rows,ctx,w,h] = beginning;
-    UpdateDisplay(initial_Grid,scale,cols,rows,ctx,w,h);
+// 
+function btnRandom(){
+    let {initialGrid,scale,cols,rows,ctx,w,h} =  stateGame.beginning;
+    stateGame.beginning = {initialGrid:randomGrid(cols,rows),scale,cols,rows,ctx,w,h};
+    ({initialGrid,scale,cols,rows,ctx,w,h} =  stateGame.beginning);
+    updateDisplay(initialGrid,scale,cols,rows,ctx,w,h);
 }
     
     
 // The reset and random buttons are disabled when the game is playing
 // The reset and random buttons are enabled when the game is stopped
-function Disable_or_Enable(){
-    reset_dis = document.getElementById("Reset_Button").disabled = !isStopped;
-    random_dis = document.getElementById("Random_Button").disabled = !isStopped;
+function disableOrEnable(){
+    document.getElementById("btnReset").disabled = !stateGame.isStopped;
+    document.getElementById("btnRandom").disabled = !stateGame.isStopped;
 }
