@@ -23,7 +23,7 @@ window.addEventListener("load",()=>{
 });
 
 /*
-    A function that clear the previous grid and draw a new one.
+    Function that clear the previous grid and draw a new one.
  */
 function updateDisplay(prevGrid,scale,cols,rows,ctx,w,h){ 
     const interval = setInterval(() => {
@@ -41,7 +41,7 @@ function updateDisplay(prevGrid,scale,cols,rows,ctx,w,h){
 };
 
 /*
-A function that generates a 2D Array with 1 or 0 in random indices.
+    Function that generates a 2D Array with 1 or 0 in random indices.
 Ex:
 [
 [1,0,0,0,1]
@@ -63,7 +63,7 @@ function randomGrid(cols,rows){
 };
 
 /* 
-    A function that receives the indices of a cell and count all the neighbors
+    Function that receives the indices of a cell and count all the neighbors
 
     Ex:
     -  0 1 2 3 4
@@ -85,7 +85,7 @@ function countNeighbors(mtx,r,c,cols,rows,state){
 };
 
 /*
-    A function that generates a new 2D array after check the previous 2D Array using
+    Function that generates a new 2D array after check the previous 2D Array using
     the Conway's game life rules.
 
     - Each cell with one or no neighbors dies, as if by solitude.
@@ -119,7 +119,7 @@ function grid(mtx,cols,rows){
 };
 
 /*  
-    A function to draw each cell in the grid.
+    Function to draw each cell in the grid.
     if Matrix[ i ][ j ] == 1 == life (Filled Square) 
     Otherwise = Empty Space (Square not filled)
 */
@@ -157,13 +157,13 @@ function btnPlayStop(){
     disableOrEnable()
 }
 
-// Resets the game to the beginning of the actual grid
+// Function that resets the game to the beginning of the actual grid.
 function btnReset(){
     const {initialGrid,scale,cols,rows,ctx,w,h} = stateGame.beginning;
     updateDisplay(initialGrid,scale,cols,rows,ctx,w,h);
 }
 
-// 
+// Function that change the grid to a new random grid.
 function btnRandom(){
     let {initialGrid,scale,cols,rows,ctx,w,h} =  stateGame.beginning;
     stateGame.beginning = {initialGrid:randomGrid(cols,rows),scale,cols,rows,ctx,w,h};
@@ -172,8 +172,8 @@ function btnRandom(){
 }
     
     
-// The reset and random buttons are disabled when the game is playing
-// The reset and random buttons are enabled when the game is stopped
+// The reset and random buttons are disabled when the game is playing.
+// The reset and random buttons are enabled when the game is stopped.
 function disableOrEnable(){
     document.getElementById("btnReset").disabled = !stateGame.isStopped;
     document.getElementById("btnRandom").disabled = !stateGame.isStopped;
