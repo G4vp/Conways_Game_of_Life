@@ -4,7 +4,9 @@ let stateGame = {
     resume:null
 }
 
-window.addEventListener("load",()=>{
+window.addEventListener("load",initialSetup);
+
+function initialSetup(){
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
     const height = 500;
@@ -18,9 +20,10 @@ window.addEventListener("load",()=>{
     canvas.width = width;
     stateGame.beginning = {initialGrid:prevGrid,scale,cols,rows,ctx,width,height}
     
-    disableOrEnable()
+    disableOrEnable();
     updateDisplay(prevGrid,scale,cols,rows,ctx,width,height);
-});
+}
+
 
 /*
     Function that clear the previous grid and draw a new one.
